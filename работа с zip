@@ -1,0 +1,19 @@
+from zipfile import ZipFile
+
+name_file = "tests_2625119.zip"
+
+def tests_check(name_file):
+    # Устанавливаем соединение с zip архивом методом ZipFile библиотеки zipfile и присваеваем его переменной my_zip
+    with ZipFile(f"C:/Users/1/Downloads/{name_file}", "r") as my_zip:
+        # далее применяем метод класса zipfile- namelist() и получаем названия всех файлов внутри zip архива
+        names_file = [i for i in my_zip.namelist() if len(i) == 1]
+        result = []
+
+        for number in names_file:
+            # открываем нужные нам файлы в zip архиве с помощью метода open() класса zipfile
+            with my_zip.open(f"{number}") as test_file:
+                # методом класса zipfile - read() счит-ем файл из архива (пол-ем в байтах) и устанав-ем кодировку utf-8
+                task_test = test_file.read().decode("utf-8")
+                task_test = task_test[:-1].replace("print(", "")
+                result.append(task_test[task_test.index("["): task_test.index("]") + 1])
+        return result
